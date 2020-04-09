@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>โรงเรียนอนุบาลดำเนินสะดวก (วัดโคกบำรุงราษฎร์ รตนลาโภประชาสรรค์)</title>
+<link rel='icon' href='img/favicon.png' type='image/png'>
+<style>
+    header, #description, #dl-form, #dl-cid {
+        text-align: center;
+    }
+
+    header {
+        margin-top: 30px;
+    }
+
+    #description {
+        margin-top: 30px;
+        font-size: 14pt;
+    }
+
+    #dl-form {
+        margin-top: 30px;
+    }
+
+    #dl-cid {
+        width: 220px;
+        height: 30px;
+        font-size: 12pt;
+    }
+
+    #dl-msg {
+        margin-top: 30px;
+        font-size: 12pt;
+        color: darkred;
+    }
+
+    #btn-dl {
+        width: 220px;
+        height: 35px;
+        font-size: 12pt;
+    }
+</style>
+</head>
+<body>
+<div id="container">
+    <header>
+        <img id="logo" src="img/logo.jpg" width="300" />
+        <!-- <h2>โรงเรียนอนุบาลดำเนินสะดวก</h2> -->
+    </header>
+<div id="description">
+ประกาศผลสอบ ประจำปีการศึกษา 2562<br/>
+ชั้นประถมศึกษาปีที่ 1/1<br/>
+คุณครู ดารุนันท์  ลี้เจริญ
+</div>
+<div id="dl-form">
+    <!-- 1234567890123 -->
+    <input type="number" id="dl-cid" placeholder="เลขบัตรประชาชนของนักเรียน"
+           autocomplete="off" maxlength="13" value=""
+           onfocus="(msg.innerText = '')"
+           oninput="(this.value = this.value.slice(0, this.maxLength))" />
+<br/><br/>
+    <button id="btn-dl" onclick="dl()">ดาวน์โหลด</button>
+    <div id="dl-msg"></div>
+</div>
+
+</div>
+<script>
+
+    var cid = document.getElementById("dl-cid");
+    var msg = document.getElementById("dl-msg");
+
+    function dl() {
+
+        console.log(cid.value);
+
+        if (valid(cid.value)) {
+            
+            var pdfUrl = './p1-1/pdf/' + cid.value + '.pdf';
+
+            fetch(pdfUrl, { method: 'HEAD'} )
+            .then(function(response) {
+                console.log(response.ok + ":" + response.statusText);
+                if (!response.ok) {
+                    msg.innerText = "ไม่พบข้อมูล";
+                } else {
+                    //window.open(pdfUrl, 'grade_win');
+                    window.location.href = pdfUrl;
+                }
+            })
+            .catch(function(error) {
+                console.log('error: \n', error);
+            });
+
+        } else {
+            msg.innerText = "หมายเลขบัตรประชาชนไม่ถูกต้อง";
+        }
+    }
+
+    function valid(cid) {
+        return isNaN(cid) || (cid >= 74012182421 && cid <= 9999999999999)
+    }
+
+</script>
+</body>
+</html>
